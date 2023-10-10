@@ -4,7 +4,7 @@ This package was written by Pacific Northwest National Laboratory undergraduate 
 Installation:
 Running this code requires the use of Python3. This can be installed via Homebrew, anaconda, or miniconda. It further requires several packages to be installed using the "pip3" Python command. These include pybuyllet, numpy, and scipy. Other packages which may require pip installation are imported at the top of "general_mesh.py" codes and may include math, random, pybullet_data, and matplotlib.pyplot. To execute installation commands, simply run "$pip3 install package_name" in the command line.
 
-The PyBullet Quickstart Guide is included in this folder. The source code can be found at https://github.com/bulletphysics/bullet3 
+The PyBullet Quickstart Guide can be found at https://github.com/bulletphysics/bullet3 
 
 URDF files:
 Any shape can be imported into these simulations. Using a URDF file is necessary to ensure centers of mass are accurate. This is done through a URDF file titled “general.urdf”, which in turn takes a .obj/.stl file designing a single instance of the desired shape. To insert the correct file, simply change the two lines specifying the file path in general.urdf. The “obj_files” folder contains files for several shapes which can be used, including cubes, spheres, trapezoids, and clays. 
