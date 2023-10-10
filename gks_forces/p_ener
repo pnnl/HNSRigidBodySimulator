@@ -1,0 +1,17 @@
+# Set the output file format and name (e.g., PNG or PDF)
+set terminal pngcairo enhanced size 800,600
+set output "urdf_energy.png"
+# Set the title and axis labels
+set title "Time vs. Energy"
+set xlabel "Time"
+set ylabel "Energy"
+# Set the legend
+set key left top
+# Plot the data
+plot "energy.out" using 1:2 with points lw 2 title "Potential Energy", \
+     "energy.out" using 1:3 with points lw 2 title "Kinetic Energy", \
+     "energy.out" using 1:4 with points lw 2 title "Total Energy", \
+     "col.out" using 1:2 with points lw 2 title "Collisions" 
+
+    # "velocities.out" using 1:2 with lines lw 2 title "lin vel", \
+   #  "velocities.out" using 1:3 with lines lw 2 title "ang vel", \

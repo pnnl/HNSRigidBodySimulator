@@ -1,0 +1,17 @@
+# Set the output file format and name (e.g., PNG or PDF)
+set terminal pngcairo enhanced size 800,600
+set output "mom.png"
+# Set the title and axis labels
+set title "Time vs. Momentum"
+set xlabel "Time"
+set ylabel "Momentum"
+# Set the legend
+set key left top
+# Plot the data
+plot "momentum.out" using 1:2 with points lw 2 title "Linear Momentum", \
+     "momentum.out" using 1:3 with points lw 2 title "Angular Momentum", \
+     "momentum.out" using 1:4 with points lw 2 title "Total Momentum"
+    # "col.out" using 1:2 with points lw 2 title "Collisions" 
+
+    # "velocities.out" using 1:2 with lines lw 2 title "lin vel", \
+   #  "velocities.out" using 1:3 with lines lw 2 title "ang vel", \

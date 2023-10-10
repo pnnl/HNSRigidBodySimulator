@@ -1,0 +1,28 @@
+Introduction:
+This package was written by Pacific Northwest National Laboratory undergraduate interns Hannah Kunkel, Nicholas Mundy, and Sofia Marina. It represents our cumulative effort toward the simulation of many rigid bodies in a molecular dynamics capacity. This package uses the BulletPhysics engine and is designed to run using Python3. As this engine was designed primarily for use in video games, we have been adapting it for scientific computing. The aim of these files is to produce accurate simulations and calculations that include contact collisions, treating particles as rigid bodies rather than collections of point interactions, or "raspberries."
+
+Installation:
+Running this code requires the use of Python3. This can be installed via Homebrew, anaconda, or miniconda. It further requires several packages to be installed using the "pip3" Python command. These include pybuyllet, numpy, and scipy. Other packages which may require pip installation are imported at the top of "general_mesh.py" codes and may include math, random, pybullet_data, and matplotlib.pyplot. To execute installation commands, simply run "$pip3 install package_name" in the command line.
+
+The PyBullet Quickstart Guide is included in this folder. The source code can be found at https://github.com/bulletphysics/bullet3 
+
+URDF files:
+Any shape can be imported into these simulations. Using a URDF file is necessary to ensure centers of mass are accurate. This is done through a URDF file titled “general.urdf”, which in turn takes a .obj/.stl file designing a single instance of the desired shape. To insert the correct file, simply change the two lines specifying the file path in general.urdf. The “obj_files” folder contains files for several shapes which can be used, including cubes, spheres, trapezoids, and clays. 
+To generate further configurations, we have found it easiest to use Blender. Simply download and enter the Blender application and create the desired shape, making sure to set the center of mass appropriately. Then, export the file as .obj/.stl. Alternatively, files can be generated using “gmsh” and converted to .obj using “meshio.”
+
+Input Files:
+Simulation parameters are specified using an input file, “input.in.” Variables can be found in “inputFormat.txt” and adjusted in “input.in”. In “general_mesh.py”, the minimum epsilon “e_min” is set to one. This is for Lennard Jones forces and should also be adjusted according to other changes. Object mass can be changed within “general_mesh.py.”
+
+Units:
+Though PyBullet does not specify a unit system, our code runs according to mks unit proportions on the order of 1m. 
+The timestep is set using “p.setTimeStep().” This step is measured in Hz and defaults to 1/240s. Because PyByllet uses a sequential impulse method for contact forces, the smaller the timestep, the more accurate collisions become. We have found the value of at least 1/10000s to be acceptable. Increasing the denominator results in greater collision accuracy. (Relatedly, in order to conserve energy, we manually adjust the resulting velocities post-collision to prevent energy gain. This is more important at larger timesteps, and assumes perfect elasticity. For more information on our integrator, sequential impulse, and our adjustment, please reach out to one of the undergraduate interns.)
+
+Folders:
+The General and Anneal folders run “general_mesh.py” and “anneal.py.” To run the simulation, execute "$python3 general_mesh.py'' or "$python3 anneal.py" in the respective directory.This generates a box of objects with random initial positions/velocities and evolves the system in time according to forces from “forces.py.” These codes are identical, except the annealing code resets all velocities to zero when the kinetic energy reaches a maximum. To visualize in PyBullet, set p.connect to GUI in the "create_environment" method. For a faster runtime with no visualization, change this to DIRECT. Plots can be obtained by plotting p* scripts, “$gnuplot p*”; installation of gnuplot can be performed through Homebrew.
+
+Gks-forces uses a force code written by Greg Schenter, creating Coulomb forces between the rigid bodies to form chains. To run this code one must first go into the src directory “$cd src.” Within this directory type “$make gks-force.x.” Once that has compiled, type “$mv gk-force.x ..” to move it into the above directory for it to be accessed by the “general_mesh.py” code. *VERY IMPORTANT NOTE* When adjusting the number of bodies in the “input.in” file for “general_mesh.py”, one must also change the first line of “setup.in” to match the number in line one of “input.in” this is to ensure that the GKS force code knows how many bodies to apply the forces to. With GKS forces it has been found to produce best results of the bodies linking together when run with at least 10,000 time steps. Because we use mks units and these forces use atomic unis, they must be scaled/converted in order to be effective. For the forces/torques themselves, this factor is approximately x10e10.
+
+The Debug folder contains a hard-coded two-object system and is useful for debugging specific errors. 
+
+Continuing Development:
+In regards to optimization, several factors should be considered before performing significant calculations with this code. These include implementing a cutoff for our Lennard Jones forces and dynamic timestep sizing depending on object distances. Further, units may need to be adapted depending on what forces are being used. This may involve converting our units from mks to other units, or scaling our units (e.g. to 10e-10m, 10e-27 kg, etc.).

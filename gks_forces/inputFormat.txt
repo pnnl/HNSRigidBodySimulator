@@ -1,0 +1,9 @@
+number of meshes
+.obj file path specifying type of mesh
+box size / 2
+scale
+epsilon space sigma
+f(r) number of points
+ray length in inside() method
+number of timesteps
+frequency of structure factor samples
