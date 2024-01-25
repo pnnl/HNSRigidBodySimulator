@@ -1,4 +1,5 @@
 import math
+import os
 import numpy as np
 import random as r
 import pybullet as p
@@ -12,7 +13,12 @@ import forces as f
 def main():
     create_environment()
 
-    inp = open("input.in", "r") # input file
+    #use this to write paths from now on as os.path.join(here, "{filename}")
+    here = os.path.dirname(os.path.abspath(__file__))
+
+    print(here)
+
+    inp = open(os.path.join(here, "input.in"), "r") # input file
     out = open("output.out", "w") #writes positions and quaternions
     ener = open("energy.out", "w") #writes energies. Plot with script "p1"
     dists = open("distances.out", "w") #writes the minimum distance each time-step
@@ -24,8 +30,10 @@ def main():
     scale = float(inp.readline().strip())
 
     # Creates meshes at random positions in box
+    mesh_path = os.path.join(here, "general.urdf")
+
     for i in range(num_meshes):
-        meshes[i] = create_mesh(mesh_path=path, position=[r.uniform(-box_size, box_size), r.uniform(-box_size, box_size), r.uniform(-box_size, box_size)], scale=scale)
+        meshes[i] = create_mesh(mesh_path, position=[r.uniform(-box_size, box_size), r.uniform(-box_size, box_size), r.uniform(-box_size, box_size)], scale=scale)
 
     # Sets Lennard-Jones parameters
     params = inp.readline().split()
@@ -74,6 +82,7 @@ def main():
         
         for i in range(num_meshes):
             com_position, _ = p.getBasePositionAndOrientation(meshes[i])
+            #updates the force
             p.applyExternalForce(meshes[i], -1, forces[i], com_position, p.WORLD_FRAME)
 
         # Enforces periodic boundary conditions (PBC) on the mesh positions
@@ -197,7 +206,9 @@ def create_environment():
 
 # Creates a mesh given an object file, position, mass, and scale
 def create_mesh(mesh_path, position, mass=2, scale=1):
-    mesh = p.loadURDF("general.urdf", basePosition= position, baseOrientation=[0, 0, 0, 1], useFixedBase=0, globalScaling=scale)
+    #mesh path not used at all here, assuming that general.urdf is the mesh path that they just hardcoded
+
+    mesh = p.loadURDF(mesh_path, basePosition= position, baseOrientation=[0, 0, 0, 1], useFixedBase=0, globalScaling=scale)
 
     p.changeDynamics(mesh, -1, mass=mass, restitution=1.0, lateralFriction=0.0, spinningFriction=0.0, rollingFriction=0.0, linearDamping=0.0, angularDamping=0.0)
     
